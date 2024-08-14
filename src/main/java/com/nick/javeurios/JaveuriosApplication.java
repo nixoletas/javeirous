@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.UUID;
+
 @SpringBootApplication
 public class JaveuriosApplication implements CommandLineRunner {
 
@@ -17,10 +19,9 @@ public class JaveuriosApplication implements CommandLineRunner {
 	@Autowired
 	private UserRepository userRepository;
 
+
 	@Override
 	public void run(String... args) throws Exception {
-		userRepository.save(new UserEntity(1L, "Nick"));
-		userRepository.save(new UserEntity(2L, "Pedro"));
-		userRepository.save(new UserEntity(3L, "Paulo"));
+		UUID userId = UUID.randomUUID();
 	}
 }
