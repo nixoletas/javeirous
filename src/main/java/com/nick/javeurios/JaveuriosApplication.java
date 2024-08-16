@@ -23,5 +23,6 @@ public class JaveuriosApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		UUID userId = UUID.randomUUID();
+		userRepository.save(new UserEntity(userId, "1231231312", "Antena SEM DESCRICAO", "B Adm 14, 3 MAIO 24"));
 	}
 }

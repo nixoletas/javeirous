@@ -13,14 +13,13 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_users")
+@Table(name = "tb_carga")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    private String name;
-
-    private Integer age;
+    private String patrimonio;
+    private String descricao;
+    private String boletim;
 }
