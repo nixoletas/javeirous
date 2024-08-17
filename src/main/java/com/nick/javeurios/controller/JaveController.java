@@ -16,12 +16,12 @@ public class JaveController {
     @Autowired
     private CargaRepository cargaRepository;
 
-    @GetMapping(path = "/")
+    @GetMapping
     public List<CargaEntity> findAll(){
         return cargaRepository.findAll();
     }
 
-    @PostMapping(path = "/")
+    @PostMapping
     public CargaEntity create(@RequestBody CargaEntity cargaEntity){
         validateStatus(cargaEntity.getStatus());
         return cargaRepository.save(cargaEntity);
