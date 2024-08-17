@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "tb_militar")
@@ -33,5 +35,13 @@ public class MilitarEntity {
     private String subunidade;
 
     private String telefone;
+
+    @OneToMany(mappedBy = "militarEntity")
+    private List<CargaEntity> cargaEntityList;
+
+    public MilitarEntity(List<CargaEntity> cargaEntityList) {
+        this.cargaEntityList = cargaEntityList;
+    }
+
 
 }

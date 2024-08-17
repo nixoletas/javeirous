@@ -20,4 +20,8 @@ public class CargaEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @ManyToOne
+    @JoinColumn(name = "militar_id")
+    private MilitarEntity militarEntity;
+
 }
