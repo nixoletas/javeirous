@@ -1,38 +1,38 @@
 package com.nick.javeurios.controller;
 
-import com.nick.javeurios.entity.UserEntity;
-import com.nick.javeurios.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
+import com.nick.javeurios.entity.CargaEntity;
+import com.nick.javeurios.entity.Status;
+import com.nick.javeurios.repository.CargaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/carga")
 public class JaveController {
 
     @Autowired
-    private UserRepository userRepository;
+    private CargaRepository cargaRepository;
 
     @GetMapping(path = "/")
-    public List<UserEntity> findAll(){
-        return userRepository.findAll();
+    public List<CargaEntity> findAll(){
+        return cargaRepository.findAll();
     }
 
     @PostMapping(path = "/")
-    public UserEntity create(@RequestBody UserEntity userEntity){
-        return userRepository.save(userEntity);
+    public CargaEntity create(@RequestBody CargaEntity cargaEntity){
+        validateStatus(cargaEntity.getStatus());
+        return cargaRepository.save(cargaEntity);
     }
 
     @PutMapping("/{id}")
-    public UserEntity update(@PathVariable("id") UUID id, @RequestBody UserEntity userEntity) {
-        if (userRepository.existsById(id)) {
-            userEntity.setId(id);
-            return userRepository.save(userEntity);
+    public CargaEntity update(@PathVariable("id") Long id, @RequestBody CargaEntity cargaEntity) {
+        if (cargaRepository.existsById(id)) {
+            validateStatus(cargaEntity.getStatus());
+            cargaEntity.setId(id);
+            return cargaRepository.save(cargaEntity);
         } else {
             throw new RuntimeException("not found");
         }
@@ -40,11 +40,18 @@ public class JaveController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") UUID id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
+    public void delete(@PathVariable("id") Long id) {
+        if (cargaRepository.existsById(id)) {
+            cargaRepository.deleteById(id);
         } else {
             throw new RuntimeException("not found");
         }
+    }
+
+    private void validateStatus(Status status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status não pode ser nulo.");
+        }
+        // Optionally, add more validation logic here if needed
     }
 }

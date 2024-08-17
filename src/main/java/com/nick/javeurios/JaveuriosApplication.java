@@ -1,7 +1,10 @@
 package com.nick.javeurios;
 
-import com.nick.javeurios.entity.UserEntity;
-import com.nick.javeurios.repository.UserRepository;
+import com.nick.javeurios.entity.MilitarEntity;
+import com.nick.javeurios.entity.PostoGrad;
+import com.nick.javeurios.entity.Subunidade;
+import com.nick.javeurios.repository.CargaRepository;
+import com.nick.javeurios.repository.MilitarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,12 +20,22 @@ public class JaveuriosApplication implements CommandLineRunner {
 	}
 
 	@Autowired
-	private UserRepository userRepository;
-
+	private CargaRepository userRepository;
+	@Autowired
+	private MilitarRepository militarRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
-		UUID userId = UUID.randomUUID();
-		userRepository.save(new UserEntity(userId, "1231231312", "Antena SEM DESCRICAO", "B Adm 14, 3 MAIO 24"));
+		UUID randomId = UUID.randomUUID();
+
+		PostoGrad posto = PostoGrad.PRIM_TEN;
+
+//		militarRepository.save(new MilitarEntity(
+//				randomId,
+//				"1100101010",
+//				"DAISUKE",
+//				Subunidade.EM,
+//				"11963961870"
+//				));
 	}
 }

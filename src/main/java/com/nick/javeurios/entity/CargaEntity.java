@@ -14,12 +14,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_carga")
-public class UserEntity {
+public class CargaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String patrimonio;
     private String descricao;
     private String boletim;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
 }
