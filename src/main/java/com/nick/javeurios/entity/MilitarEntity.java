@@ -37,11 +37,7 @@ public class MilitarEntity {
     private String telefone;
 
     @OneToMany(mappedBy = "militarEntity")
-    private List<CargaEntity> cargaEntityList;
-
-    public MilitarEntity(List<CargaEntity> cargaEntityList) {
-        this.cargaEntityList = cargaEntityList;
-    }
+    private List<CargaEntity> cautelado;
 
 
 }

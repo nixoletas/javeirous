@@ -1,5 +1,6 @@
 package com.nick.javeurios.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class CargaEntity {
 
     @ManyToOne
     @JoinColumn(name = "militar_id")
+    @JsonIgnore
     private MilitarEntity militarEntity;
 
 }
