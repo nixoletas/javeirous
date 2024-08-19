@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "tb_militar")
-public class MilitarEntity {
+public class Militar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,8 +36,8 @@ public class MilitarEntity {
 
     private String telefone;
 
-    @OneToMany(mappedBy = "militarEntity")
-    private List<CargaEntity> cautelado;
+    @OneToMany(mappedBy = "militar")
+    private List<Cautela> cautelas;
 
 
 }

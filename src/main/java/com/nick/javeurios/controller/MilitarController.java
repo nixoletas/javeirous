@@ -1,21 +1,23 @@
 package com.nick.javeurios.controller;
 
-import com.nick.javeurios.entity.CargaEntity;
-import com.nick.javeurios.entity.MilitarEntity;
-import com.nick.javeurios.entity.Status;
+import com.nick.javeurios.entity.Carga;
+import com.nick.javeurios.entity.Cautela;
+import com.nick.javeurios.entity.Militar;
+import com.nick.javeurios.enums.Status;
 import com.nick.javeurios.repository.CargaRepository;
+import com.nick.javeurios.repository.CautelaRepository;
 import com.nick.javeurios.repository.MilitarRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
 @Validated
 @RestController
 @RequestMapping("/api/militares")
@@ -27,21 +29,24 @@ public class MilitarController {
     @Autowired
     private CargaRepository cargaRepository;
 
+    @Autowired
+    private CautelaRepository cautelaRepository;
+
     @GetMapping
-    public List<MilitarEntity> findAll(){
+    public List<Militar> findAll(){
         return militarRepository.findAll();
     }
 
     @PostMapping
-    public MilitarEntity create(@RequestBody @Valid MilitarEntity militarEntity){
-        return militarRepository.save(militarEntity);
+    public Militar create(@RequestBody @Valid Militar militar){
+        return militarRepository.save(militar);
     }
 
     @PutMapping("/{id}")
-    public MilitarEntity update(@PathVariable("id") Long id, @RequestBody @NotNull @Positive MilitarEntity militarEntity) {
+    public Militar update(@PathVariable("id") Long id, @RequestBody @NotNull @Positive Militar militar) {
         if (militarRepository.existsById(id)) {
-            militarEntity.setId(id);
-            return militarRepository.save(militarEntity);
+            militar.setId(id);
+            return militarRepository.save(militar);
         } else {
             throw new RuntimeException("not found");
         }
@@ -57,22 +62,27 @@ public class MilitarController {
         }
     }
 
-    //Cautelar material
     @PostMapping("/{militarId}/cautelar/{cargaId}")
-    public MilitarEntity cautelarMaterial(
+    public Militar cautelarMaterial(
             @PathVariable("militarId") @NotNull @Positive Long militarId,
             @PathVariable("cargaId") @NotNull @Positive Long cargaId) {
 
-        MilitarEntity militar = militarRepository.findById(militarId)
+        Militar militar = militarRepository.findById(militarId)
                 .orElseThrow(() -> new RuntimeException("Militar não encontrado"));
 
-        CargaEntity carga = cargaRepository.findById(cargaId)
+        Carga carga = cargaRepository.findById(cargaId)
                 .orElseThrow(() -> new RuntimeException("Material não encontrado"));
 
         if (Status.DISPONIVEL.equals(carga.getStatus())) {
-            System.out.println(carga.getStatus());
+            // Criação de uma nova cautela
+            Cautela cautela = new Cautela();
+            cautela.setMilitar(militar);
+            cautela.setCarga(carga);
+            cautela.setDataCautela(LocalDateTime.now());
+            cautelaRepository.save(cautela);
+
+            // Atualiza o status do material
             carga.setStatus(Status.CAUTELADO);
-            carga.setMilitarEntity(militar);
             cargaRepository.save(carga);
 
             return militar;
@@ -80,4 +90,34 @@ public class MilitarController {
             throw new RuntimeException("Material já está cautelado");
         }
     }
+
+    @PostMapping("/{militarId}/descautelar/{cargaId}")
+    public Militar devolverMaterial(
+            @PathVariable("militarId") @NotNull @Positive Long militarId,
+            @PathVariable("cargaId") @NotNull @Positive Long cargaId) {
+
+        Militar militar = militarRepository.findById(militarId)
+                .orElseThrow(() -> new RuntimeException("Militar não encontrado"));
+
+        Carga carga = cargaRepository.findById(cargaId)
+                .orElseThrow(() -> new RuntimeException("Material não encontrado"));
+
+        Cautela cautela = cautelaRepository.findByMilitarAndCarga(militar, carga)
+                .orElseThrow(() -> new RuntimeException("Cautela não encontrada"));
+
+        if (Status.CAUTELADO.equals(carga.getStatus())) {
+            // Registra a data de devolução
+            cautela.setDataDevolucao(LocalDateTime.now());
+            cautelaRepository.save(cautela);
+
+            // Atualiza o status do material
+            carga.setStatus(Status.DISPONIVEL);
+            cargaRepository.save(carga);
+
+            return militar;
+        } else {
+            throw new RuntimeException("Material não está cautelado");
+        }
+    }
+
 }

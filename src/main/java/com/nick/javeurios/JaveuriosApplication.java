@@ -1,8 +1,6 @@
 package com.nick.javeurios;
 
-import com.nick.javeurios.entity.MilitarEntity;
-import com.nick.javeurios.entity.PostoGrad;
-import com.nick.javeurios.entity.Subunidade;
+import com.nick.javeurios.enums.PostoGrad;
 import com.nick.javeurios.repository.CargaRepository;
 import com.nick.javeurios.repository.MilitarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +24,6 @@ public class JaveuriosApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		UUID randomId = UUID.randomUUID();
 
-		PostoGrad posto = PostoGrad.PRIM_TEN;
-
-//		militarRepository.save(new MilitarEntity(
-//				randomId,
-//				"1100101010",
-//				"DAISUKE",
-//				Subunidade.EM,
-//				"11963961870"
-//				));
 	}
 }

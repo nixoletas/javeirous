@@ -1,4 +1,4 @@
-package com.nick.javeurios.entity;
+package com.nick.javeurios.enums;
 
 public enum Subunidade {
     EM,

@@ -1,15 +1,17 @@
 package com.nick.javeurios.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nick.javeurios.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
 @Table(name = "tb_carga")
-public class CargaEntity {
+public class Carga {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +20,18 @@ public class CargaEntity {
     private String descricao;
     private String boletim;
 
+    private String serie;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "militar_id")
     @JsonIgnore
-    private MilitarEntity militarEntity;
+    private Militar militar;
 
+    private LocalDateTime dataCautela;
+
+    @OneToMany(mappedBy = "carga")
+    private List<Cautela> cautela;
 }

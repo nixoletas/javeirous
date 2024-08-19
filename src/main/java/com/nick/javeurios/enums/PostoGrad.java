@@ -1,9 +1,4 @@
-package com.nick.javeurios.entity;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+package com.nick.javeurios.enums;
 
 public enum PostoGrad {
     CEL("Cel"),

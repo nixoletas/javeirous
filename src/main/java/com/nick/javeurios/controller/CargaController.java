@@ -1,7 +1,7 @@
 package com.nick.javeurios.controller;
 
-import com.nick.javeurios.entity.CargaEntity;
-import com.nick.javeurios.entity.Status;
+import com.nick.javeurios.entity.Carga;
+import com.nick.javeurios.enums.Status;
 import com.nick.javeurios.repository.CargaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,28 +11,28 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/carga")
-public class JaveController {
+public class CargaController {
 
     @Autowired
     private CargaRepository cargaRepository;
 
     @GetMapping
-    public List<CargaEntity> findAll(){
+    public List<Carga> findAll(){
         return cargaRepository.findAll();
     }
 
     @PostMapping
-    public CargaEntity create(@RequestBody CargaEntity cargaEntity){
-        validateStatus(cargaEntity.getStatus());
-        return cargaRepository.save(cargaEntity);
+    public Carga create(@RequestBody Carga carga){
+        validateStatus(carga.getStatus());
+        return cargaRepository.save(carga);
     }
 
     @PutMapping("/{id}")
-    public CargaEntity update(@PathVariable("id") Long id, @RequestBody CargaEntity cargaEntity) {
+    public Carga update(@PathVariable("id") Long id, @RequestBody Carga carga) {
         if (cargaRepository.existsById(id)) {
-            validateStatus(cargaEntity.getStatus());
-            cargaEntity.setId(id);
-            return cargaRepository.save(cargaEntity);
+            validateStatus(carga.getStatus());
+            carga.setId(id);
+            return cargaRepository.save(carga);
         } else {
             throw new RuntimeException("not found");
         }
